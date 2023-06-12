@@ -1,8 +1,5 @@
 const express = require("express");
 const app = express();
-const projectsRouter = require("./routers/projectsRouter");
-const connexionRouter = require("./routers/connexionRouter");
-const aboutRouter = require("./routers/aboutRouter");
 require("dotenv").config();
 
 app.use(express.json());
@@ -18,8 +15,5 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use("/api/projects", projectsRouter);
-app.use("/api/auth", connexionRouter);
-app.use("/api/about", aboutRouter);
 
 module.exports = app;

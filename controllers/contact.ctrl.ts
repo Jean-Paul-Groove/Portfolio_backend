@@ -9,13 +9,26 @@ export async function sendMessage(
 ) {
   try {
     const { nom, email, message } = req.body;
-    await transporter.sendMail({
-      from: email,
-      sender: process.env.SENDING_EMAIL_USER,
-      to: [process.env.DESTINATION_EMAIL],
-      subject: "Message envoyé depuis le Portfolio par " + nom,
-      text: message,
-    });
+    await transporter.sendMail(
+      {
+        from: email,
+        sender: process.env.SENDING_EMAIL_USER,
+        to: [process.env.DESTINATION_EMAIL],
+        subject: "Message envoyé depuis le Portfolio par " + nom,
+        text: message,
+      },
+      (error: Error, info: any) => {
+        if (error) {
+          throw error;
+        } else {
+          if (info.rejected.length > 0) {
+            logger.warn(
+              `Message from ${email} rejected from the destination Email`
+            );
+          }
+        }
+      }
+    );
     res.status(200).json({ message: "Votre message a bien été envoyé" });
   } catch (error) {
     if (error instanceof Error) {

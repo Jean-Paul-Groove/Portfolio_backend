@@ -1,6 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
-import { initialize } from "./db.config";
+import { initialize } from "./config/db.config";
 const projetRouter = require("./routers/projet.routes");
+const aboutRouter = require("./routers/about.routes");
+const contactRouter = require("./routers/contact.routes");
 require("dotenv").config();
 initialize();
 const app = express();
@@ -21,4 +23,6 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 });
 
 app.use("/api/projets", projetRouter);
+app.use("/api/about", aboutRouter);
+app.use("/api/contact", contactRouter);
 module.exports = app;

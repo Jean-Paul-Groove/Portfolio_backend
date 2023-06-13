@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-const logger = require("../logger");
-import { connectionPool } from "../db.config";
+const logger = require("../config/logger.config");
+import { connectionPool } from "../config/db.config";
 
 exports.getProjects = async (
   req: Request,

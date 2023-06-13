@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+const projectRouter = express.Router();
 const projectsCtrl = require("../controllers/projet.ctrl.ts");
 
-router.get("/", projectsCtrl.getProjects);
+projectRouter.get("/", projectsCtrl.getProjects);
 
-module.exports = router;
+module.exports = projectRouter;

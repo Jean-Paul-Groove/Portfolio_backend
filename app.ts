@@ -1,11 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
-const app = express();
-require("dotenv").config();
 import { initialize } from "./db.config";
-
-export const connectionPool = initialize();
+const projetRouter = require("./routers/projet.routes");
+require("dotenv").config();
+initialize();
+const app = express();
 
 app.use(express.json());
+
 app.use((req: Request, res: Response, next: NextFunction): void => {
   res.set("Access-Control-Allow-Origin", "*");
   res.set(
@@ -19,4 +20,5 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   next();
 });
 
+app.use("/api/projets", projetRouter);
 module.exports = app;

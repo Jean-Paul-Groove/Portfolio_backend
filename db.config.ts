@@ -10,14 +10,15 @@ const config = {
 };
 
 export async function initialize() {
-  const pool = await mysql.createPool(config);
-  await pool.query(`USE ${config.database}`);
-  await pool.query(
+  const connection = await mysql.createConnection(config);
+  await connection.query(`USE ${config.database}`);
+  await connection.query(
     `CREATE TABLE IF NOT EXISTS projet (id int PRIMARY KEY auto_increment, title varchar(255), img varchar(255), tags varchar(255), url varchar(255), description text );`
   );
-  await pool.query(
+  await connection.query(
     `CREATE TABLE IF NOT EXISTS intro (id int primary key auto_increment, name varchar(255), img varchar(255), description text);`
   );
   console.log("DB initialisée");
-  return pool;
 }
+
+export const connectionPool = mysql.createPool(config);

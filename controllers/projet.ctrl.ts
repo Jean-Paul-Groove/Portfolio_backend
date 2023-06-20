@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 const logger = require("../config/logger.config");
 import { connectionPool } from "../config/db.config";
+import { Project } from "../models/Project";
 
 exports.getProjects = async (
   req: Request,
@@ -9,7 +10,7 @@ exports.getProjects = async (
 ) => {
   try {
     const result = await connectionPool.query("SELECT * from projet");
-    const projects = result[0];
+    const projects: Project[] = result[0];
     if (projects) {
       res.status(200).json(projects);
     } else {

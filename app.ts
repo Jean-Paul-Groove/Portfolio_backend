@@ -1,13 +1,15 @@
 import express, { NextFunction, Request, Response } from "express";
 import { initialize } from "./config/db.config";
-const projetRouter = require("./routers/projet.routes");
-const aboutRouter = require("./routers/about.routes");
-const contactRouter = require("./routers/contact.routes");
+const path = require("path");
+const projetRouter = require("./routes/projet.routes");
+const aboutRouter = require("./routes/about.routes");
+const contactRouter = require("./routes/contact.routes");
 require("dotenv").config();
 initialize();
 const app = express();
 
 app.use(express.json());
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.use((req: Request, res: Response, next: NextFunction): void => {
   res.set("Access-Control-Allow-Origin", "*");

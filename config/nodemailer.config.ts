@@ -8,6 +8,11 @@ let transporter = nodemailer.createTransport({
     user: process.env.SENDING_EMAIL_USER,
     pass: process.env.SENDING_EMAIL_PASSWORD,
   },
-});
+  tls: {
+    rejectUnauthorized: false
+  },
+  
+},{from: process.env.SENDING_EMAIL_USER,
+  to: [process.env.DESTINATION_EMAIL]});
 
 export default transporter;

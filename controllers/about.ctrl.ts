@@ -1,17 +1,19 @@
 import { NextFunction, Request, Response } from "express";
+const fs = require("fs");
 const logger = require("../config/logger.config");
 import { connectionPool } from "../config/db.config";
+import { AboutContent } from "../models/About";
 
 exports.getAbout = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await connectionPool.query("SELECT * from about WHERE id=1");
-    const [about] = result[0];
+    const about: AboutContent = result[0][0];
     if (about) {
       res.status(200).json(about);
-    } else {
-      res.status(404).json({ message: "Contenu A propos introuvable ..." });
-      logger.warn("Contenu A propos introuvable ...");
+      return;
     }
+    res.status(404).json({ message: "Contenu A propos introuvable ..." });
+    logger.warn("Contenu A propos introuvable ...");
   } catch (error) {
     res.status(500).json(error);
     if (error instanceof Error) {
@@ -25,13 +27,33 @@ exports.updateAbout = async (
   next: NextFunction
 ) => {
   try {
-    const { name, description } = req.body;
-    const result = await connectionPool.query(
-      "UPDATE about SET name=?, description=?  WHERE id =1;",
-      [name, description]
-    );
-    res.status(200).json({ message: "Modifications effectuées" });
-    logger.info("Modification de about");
+    const newAbout: AboutContent = {
+      name: req.body.name,
+      description: req.body.description,
+    };
+    if (newAbout) {
+      if (req.body.imgUrl) {
+        const data = await connectionPool.query(
+          "SELECT img FROM about WHERE id=1;"
+        );
+        const formerImgUrl: String = data[0][0].img;
+
+        await connectionPool.query(
+          "UPDATE about SET name=?, description=?, img=?  WHERE id =1;",
+          [newAbout.name, newAbout.description, req.body.imgUrl]
+        );
+        fs.unlink("public" + formerImgUrl.split("public")[1], () => {
+          logger.info("Photo de profil modifiée");
+        });
+      } else {
+        await connectionPool.query(
+          "UPDATE about SET name=?, description=?  WHERE id =1;",
+          [newAbout.name, newAbout.description]
+        );
+      }
+      res.status(200).json({ message: "Modifications effectuées" });
+      logger.info("Informations de la partie about modifiées");
+    }
   } catch (error) {
     res.status(500).json(error);
     if (error instanceof Error) {

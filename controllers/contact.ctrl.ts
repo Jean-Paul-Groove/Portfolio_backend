@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import transporter from "../config/nodemailer.config";
+import { MessageFormContent } from "../models/MessageFormContent";
+import sendEmail from "../utils/sendEmail.utils";
 const logger = require("../config/logger.config");
 
 export async function sendMessage(
@@ -8,28 +10,12 @@ export async function sendMessage(
   next: NextFunction
 ) {
   try {
-    const { nom, email, message } = req.body;
-    await transporter.sendMail(
-      {
-        from: email,
-        sender: process.env.SENDING_EMAIL_USER,
-        to: [process.env.DESTINATION_EMAIL],
-        subject: "Message envoyé depuis le Portfolio par " + nom,
-        text: message,
-      },
-      (error: Error, info: any) => {
-        if (error) {
-          throw error;
-        } else {
-          if (info.rejected.length > 0) {
-            logger.warn(
-              `Message from ${email} rejected from the destination Email`
-            );
-          }
-        }
-      }
-    );
-    res.status(200).json({ message: "Votre message a bien été envoyé" });
+    const messageFormContent: MessageFormContent = req.body;
+    if (messageFormContent) {
+      const { nom, email, message } = messageFormContent;
+      sendEmail(messageFormContent);
+      res.status(200).json({ message: "Votre message a bien été envoyé" });
+    }
   } catch (error) {
     if (error instanceof Error) {
       logger.error(error.message);

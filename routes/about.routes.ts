@@ -5,11 +5,6 @@ const aboutRouter = express.Router();
 const aboutCtrl = require("../controllers/about.ctrl.ts");
 
 aboutRouter.get("/", aboutCtrl.getAbout);
-aboutRouter.put(
-  "",
-  handleImageUpload.single("file"),
-  optimizeImage,
-  aboutCtrl.updateAbout
-);
+aboutRouter.put("", handleImageUpload, optimizeImage, aboutCtrl.updateAbout);
 
 module.exports = aboutRouter;

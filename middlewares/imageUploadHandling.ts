@@ -20,5 +20,7 @@ const fileFilter = (req: Request, file: any, cb: CallableFunction) => {
   }
 };
 
-const limits = { fileSize: 4000000 };
-module.exports = handleImageUpload({ storage, fileFilter, limits });
+const limits = { fileSize: 10000000 };
+module.exports = handleImageUpload({ storage, fileFilter, limits }).single(
+  "file"
+);

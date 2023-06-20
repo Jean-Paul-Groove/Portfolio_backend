@@ -32,7 +32,7 @@ exports.updateAbout = async (
       description: req.body.description,
     };
     if (newAbout) {
-      if (req.body.imgUrl) {
+      if (req.body.img) {
         const data = await connectionPool.query(
           "SELECT img FROM about WHERE id=1;"
         );
@@ -40,7 +40,7 @@ exports.updateAbout = async (
 
         await connectionPool.query(
           "UPDATE about SET name=?, description=?, img=?  WHERE id =1;",
-          [newAbout.name, newAbout.description, req.body.imgUrl]
+          [newAbout.name, newAbout.description, req.body.img]
         );
         fs.unlink("public" + formerImgUrl.split("public")[1], () => {
           logger.info("Photo de profil modifiée");

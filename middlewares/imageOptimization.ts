@@ -11,7 +11,7 @@ function optimizeImage(req: Request, res: Response, next: NextFunction) {
       .toFormat("webp")
       .toFile("public/" + name);
 
-    req.body.imgUrl = `${req.protocol}://${req.get("host")}/public/${name}`;
+    req.body.img = `${req.protocol}://${req.get("host")}/public/${name}`;
   }
   next();
 }

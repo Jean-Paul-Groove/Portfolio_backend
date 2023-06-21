@@ -12,5 +12,11 @@ projectRouter.post(
   projectsCtrl.addNewProject
 );
 projectRouter.delete("/:id", projectsCtrl.deleteOneProject);
+projectRouter.put(
+  "/:id",
+  handleImageUpload,
+  optimizeImage,
+  projectsCtrl.updateProject
+);
 
 module.exports = projectRouter;

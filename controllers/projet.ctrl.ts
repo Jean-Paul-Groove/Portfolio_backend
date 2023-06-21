@@ -78,3 +78,43 @@ exports.deleteOneProject = async (
     res.status(500).json(error);
   }
 };
+
+exports.updateProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const projectUpdate: Project = req.body;
+    if (!projectUpdate) {
+      throw new Error("Pas de maj transmise");
+    }
+    const projectId = req.params.id;
+    const data = await connectionPool.query(
+      "SELECT img FROM projet WHERE id=?;",
+      [projectId]
+    );
+    const formerImgUrl: string = data[0][0].img;
+    await connectionPool.query(
+      "UPDATE projet SET title = ?, img = ?, tags = ?, url = ?, description= ? WHERE id=?; ",
+      [
+        projectUpdate.title,
+        projectUpdate.img,
+        projectUpdate.tags,
+        projectUpdate.url,
+        projectUpdate.description,
+        projectId,
+      ]
+    );
+    if (formerImgUrl != projectUpdate.img) {
+      fs.unlink("public" + formerImgUrl.split("public")[1], () => {});
+    }
+    logger.info(`Le projet ${projectUpdate.title} a été modifié`);
+    res.status(200).json({ message: "Projet mis à jour avec succès" });
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(error.message);
+    }
+    res.status(500).json(error);
+  }
+};

@@ -12,13 +12,13 @@ exports.getAbout = async (req: Request, res: Response, next: NextFunction) => {
       res.status(200).json(about);
       return;
     }
-    res.status(404).json({ message: "Contenu A propos introuvable ..." });
     logger.warn("Contenu A propos introuvable ...");
+    res.status(404).json({ message: "Contenu A propos introuvable ..." });
   } catch (error) {
-    res.status(500).json(error);
     if (error instanceof Error) {
       logger.error(error.message);
     }
+    res.status(500).json(error);
   }
 };
 exports.updateAbout = async (
@@ -51,13 +51,13 @@ exports.updateAbout = async (
           [newAbout.name, newAbout.description]
         );
       }
-      res.status(200).json({ message: "Modifications effectuées" });
       logger.info("Informations de la partie about modifiées");
+      res.status(204).json({ message: "Modifications effectuées" });
     }
   } catch (error) {
-    res.status(500).json(error);
     if (error instanceof Error) {
       logger.error(error.message);
     }
+    res.status(500).json(error);
   }
 };

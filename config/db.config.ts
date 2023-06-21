@@ -18,6 +18,9 @@ export async function initialize() {
   await connection.query(
     `CREATE TABLE IF NOT EXISTS about (id int primary key auto_increment, name varchar(255), img varchar(255), description text);`
   );
+  await connection.query(
+    `CREATE TABLE IF NOT EXISTS message (id int primary key auto_increment, name varchar(255), email varchar(255), message text);`
+  );
   console.log("DB initialisée");
 }
 

@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import transporter from "../config/nodemailer.config";
 import { MessageFormContent } from "../models/MessageFormContent";
+import { connectionPool } from "../config/db.config";
 import sendEmail from "../utils/sendEmail.utils";
 const logger = require("../config/logger.config");
 
-export async function sendMessage(
+export async function handleMessage(
   req: Request,
   res: Response,
   next: NextFunction
@@ -13,6 +14,11 @@ export async function sendMessage(
     const messageFormContent: MessageFormContent = req.body;
     if (messageFormContent) {
       const { nom, email, message } = messageFormContent;
+      await connectionPool.query(
+        "INSERT INTO message (name, email, message) VALUES(?, ?, ?);",
+        [nom, email, message]
+      );
+      logger.info(`Message de ${nom} sauvegardé`);
       sendEmail(messageFormContent);
       res.status(200).json({ message: "Votre message a bien été envoyé" });
     }

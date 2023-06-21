@@ -6,10 +6,11 @@ const optimizeImage = require("../middlewares/imageOptimization");
 
 projectRouter.get("/", projectsCtrl.getProjects);
 projectRouter.post(
-  "/nouveau",
+  "/",
   handleImageUpload,
   optimizeImage,
   projectsCtrl.addNewProject
 );
+projectRouter.delete("/:id", projectsCtrl.deleteOneProject);
 
 module.exports = projectRouter;

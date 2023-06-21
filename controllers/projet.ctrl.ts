@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 const logger = require("../config/logger.config");
 import { connectionPool } from "../config/db.config";
 import { Project } from "../models/Project";
+const fs = require("fs");
 
 exports.getProjects = async (
   req: Request,
@@ -14,14 +15,14 @@ exports.getProjects = async (
     if (projects) {
       res.status(200).json(projects);
     } else {
-      res.status(404).json({ message: "Projets introuvables ..." });
       logger.warn("Projets introuvables");
+      res.status(404).json({ message: "Projets introuvables ..." });
     }
   } catch (error) {
-    res.status(500).json(error);
     if (error instanceof Error) {
       logger.error(error.message);
     }
+    res.status(500).json(error);
   }
 };
 
@@ -43,13 +44,37 @@ exports.addNewProject = async (
           newProject.description,
         ]
       );
-      res.status(201).json({ message: "Projet ajouté avec succès" });
       logger.info(`Nouveau projet ${newProject.title} ajouté avec succès`);
+      res.status(201).json({ message: "Projet ajouté avec succès" });
     }
   } catch (error) {
-    res.status(500).json(error);
     if (error instanceof Error) {
       logger.error(error.message);
     }
+    res.status(500).json(error);
+  }
+};
+exports.deleteOneProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const projectId = req.params.id;
+    const data = await connectionPool.query(
+      "SELECT img, title FROM projet WHERE id=?;",
+      [projectId]
+    );
+    const formerImgUrl: string = data[0][0].img;
+    const title: string = data[0][0].title;
+    await connectionPool.query("DELETE FROM projet WHERE id=?;", [projectId]);
+    fs.unlink("public" + formerImgUrl.split("public")[1], () => {});
+    logger.info(`Le projet ${title} a été supprimé`);
+    res.status(204).json({ message: "Suppression réalisée avec succès" });
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(error.message);
+    }
+    res.status(500).json(error);
   }
 };

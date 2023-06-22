@@ -3,8 +3,15 @@ const handleImageUpload = require("../middlewares/imageUploadHandling");
 const optimizeImage = require("../middlewares/imageOptimization");
 const aboutRouter = express.Router();
 const aboutCtrl = require("../controllers/about.ctrl.ts");
+const verifyToken = require("../middlewares/verifyToken");
 
 aboutRouter.get("/", aboutCtrl.getAbout);
-aboutRouter.put("/", handleImageUpload, optimizeImage, aboutCtrl.updateAbout);
+aboutRouter.put(
+  "/",
+  verifyToken,
+  handleImageUpload,
+  optimizeImage,
+  aboutCtrl.updateAbout
+);
 
 module.exports = aboutRouter;

@@ -4,12 +4,13 @@ const path = require("path");
 const projetRouter = require("./routes/projet.routes");
 const aboutRouter = require("./routes/about.routes");
 const contactRouter = require("./routes/contact.routes");
+const connexionRouter = require("./routes/connexion.routes");
 require("dotenv").config();
 initialize();
 const app = express();
 
 app.use(express.json());
-app.use('/public', express.static(path.join(__dirname, 'public')))
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use((req: Request, res: Response, next: NextFunction): void => {
   res.set("Access-Control-Allow-Origin", "*");
@@ -27,4 +28,5 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 app.use("/api/projets", projetRouter);
 app.use("/api/about", aboutRouter);
 app.use("/api/contact", contactRouter);
+app.use("/api/connexion", connexionRouter);
 module.exports = app;

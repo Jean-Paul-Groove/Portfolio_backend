@@ -61,3 +61,21 @@ exports.updateAbout = async (
     res.status(500).json(error);
   }
 };
+
+exports.initAboutTable = async () => {
+  try {
+    const defaultAbout: AboutContent = require("../data/default.about");
+    const result = await connectionPool.query("SELECT * from about");
+    if (!result[0][0]) {
+      await connectionPool.query(
+        "INSERT INTO about (name, img, description) VALUES(?,?,?);",
+        [defaultAbout.name, defaultAbout.img, defaultAbout.description]
+      );
+      logger.info("About initialisé avec le contenu par défaut");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(error.message);
+    }
+  }
+};

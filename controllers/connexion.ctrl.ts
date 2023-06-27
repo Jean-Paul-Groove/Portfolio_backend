@@ -2,12 +2,24 @@ import { NextFunction, Request, Response } from "express";
 import { ConenxionForm } from "../models/ConnexionForm";
 const jwt = require("jsonwebtoken");
 const logger = require("../config/logger.config");
+import bcrypt from "bcrypt";
+import { connectionPool } from "../config/db.config";
 
-exports.login = (req: Request, res: Response, next: NextFunction) => {
+exports.login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const connexionForm: ConenxionForm = req.body;
     if (connexionForm) {
-      if (connexionForm.username != process.env.PORTFOLIO_USERNAME) {
+      const response = await connectionPool.query(
+        "SELECT password from admin WHERE username= ? ;",
+        [connexionForm.username]
+      );
+      const hash = response[0][0].password;
+      const passwordValidity = await bcrypt.compare(
+        connexionForm.password,
+        hash
+      );
+
+      if (!hash) {
         logger.warn(
           `Tentative de connexion avec username incorrect(${connexionForm.username})`
         );
@@ -15,7 +27,7 @@ exports.login = (req: Request, res: Response, next: NextFunction) => {
           .status(401)
           .json({ message: "Utilisateur ou mot de passe incorrect" });
       } else {
-        if (connexionForm.password != process.env.PORTFOLIO_PASSWORD) {
+        if (!passwordValidity) {
           logger.warn(
             `Tentative de connexion avec password incorrect(${connexionForm.password})`
           );

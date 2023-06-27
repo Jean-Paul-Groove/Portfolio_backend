@@ -14,9 +14,10 @@ export async function handleMessage(
     const messageFormContent: MessageFormContent = req.body;
     if (messageFormContent) {
       const { nom, email, message } = messageFormContent;
+      const date = Date.now();
       await connectionPool.query(
-        "INSERT INTO message (name, email, message) VALUES(?, ?, ?);",
-        [nom, email, message]
+        "INSERT INTO message (name, email, message, date) VALUES(?, ?, ?, ?);",
+        [nom, email, message, date]
       );
       logger.info(`Message de ${nom} sauvegardé`);
       sendEmail(messageFormContent);

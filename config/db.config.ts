@@ -2,13 +2,24 @@ const mysql = require("mysql2/promise");
 import dotenv from "dotenv";
 const aboutCtrl = require("../controllers/about.ctrl");
 dotenv.config();
+import fs from "fs";
 
-const config = {
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-};
+const config = process.env.SSL_CA_CERTIFICATES
+  ? {
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+      ssl: {
+        ca: fs.readFileSync(process.env.SSL_CA_CERTIFICATES),
+      },
+    }
+  : {
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+    };
 
 export async function initialize() {
   const connection = await mysql.createConnection(config);

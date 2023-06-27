@@ -1,6 +1,6 @@
 import express from "express";
 const projectRouter = express.Router();
-const projectsCtrl = require("../controllers/projet.ctrl.ts");
+const projectsCtrl = require("../controllers/projet.ctrl");
 const handleImageUpload = require("../middlewares/imageUploadHandling");
 const optimizeImage = require("../middlewares/imageOptimization");
 const verifyToken = require("../middlewares/verifyToken");

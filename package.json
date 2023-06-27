@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon ./server.ts",
-    "debug": "ts-node --inspect ./server.ts"
+    "debug": "ts-node --inspect ./server.ts",
+    "build": "npx tsc",
+    "start": "node ./build/server.js"
   },
   "author": "Quentin Rousselet",
   "license": "ISC",

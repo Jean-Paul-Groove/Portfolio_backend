@@ -6,7 +6,7 @@
     "esModuleInterop": true /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
-    /*    "outDir": "out" */
+    "skipLibCheck": true,
+    "outDir": "build"
   }
 }

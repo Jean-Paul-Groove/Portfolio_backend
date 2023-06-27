@@ -5,3 +5,4 @@ logs.log
 
 public/*.webp
 public/*.pdf
+build

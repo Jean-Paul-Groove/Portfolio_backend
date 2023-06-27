@@ -56,9 +56,11 @@ Encryptage du mot de passe admin avec **bcrypt**.
 
 Gestion de la connexion via **jsonwebtoken**.
 
-### Dépendence de développement
+### Variables d'environnnement
 
 Configuration des variables d'environnement avec **dotenv**.
+
+### Dépendence de développement
 
 Rechargement du serveur automatiquement après chaque modification avec **nodemon**.
 

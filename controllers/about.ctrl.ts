@@ -71,6 +71,8 @@ exports.initAboutTable = async () => {
         "INSERT INTO about (name, img, description) VALUES(?,?,?);",
         [defaultAbout.name, defaultAbout.img, defaultAbout.description]
       );
+      const about = await connectionPool.query("SELECT * from about;");
+      console.log(about[0]);
       logger.info("About initialisé avec le contenu par défaut");
     }
   } catch (error) {

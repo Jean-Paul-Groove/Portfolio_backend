@@ -38,8 +38,9 @@ export async function initialize() {
   );
 
   await aboutCtrl.initAboutTable();
-
+  const tables = await connection.query("SHOW TABLES;");
   console.log("DB initialisée");
+  console.log(tables[0]);
 }
 
 export const connectionPool = mysql.createPool(config);

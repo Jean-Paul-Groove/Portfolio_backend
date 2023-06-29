@@ -3,6 +3,7 @@ const fs = require("fs");
 const logger = require("../config/logger.config");
 import { connectionPool } from "../config/db.config";
 import { AboutContent } from "../models/About";
+import { defaultAbout } from "../data/deafault.about";
 
 exports.getAbout = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -64,7 +65,6 @@ exports.updateAbout = async (
 
 exports.initAboutTable = async () => {
   try {
-    const defaultAbout: AboutContent = require("../data/default.about");
     const result = await connectionPool.query("SELECT * from about");
     if (!result[0][0]) {
       await connectionPool.query(
@@ -75,6 +75,8 @@ exports.initAboutTable = async () => {
       console.log(about[0]);
       logger.info("About initialisé avec le contenu par défaut");
     }
+    const about = await connectionPool.query("SELECT * from about;");
+    console.log(about[0]);
   } catch (error) {
     if (error instanceof Error) {
       logger.error(error.message);

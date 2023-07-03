@@ -10,6 +10,7 @@ require("dotenv").config();
 initialize();
 const app = express();
 
+app.enable("trust proxy");
 app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 

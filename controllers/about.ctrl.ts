@@ -72,11 +72,8 @@ exports.initAboutTable = async () => {
         [defaultAbout.name, defaultAbout.img, defaultAbout.description]
       );
       const about = await connectionPool.query("SELECT * from about;");
-      console.log(about[0]);
       logger.info("About initialisé avec le contenu par défaut");
     }
-    const about = await connectionPool.query("SELECT * from about;");
-    console.log(about[0]);
   } catch (error) {
     if (error instanceof Error) {
       logger.error(error.message);

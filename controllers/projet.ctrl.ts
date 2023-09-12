@@ -35,12 +35,13 @@ exports.addNewProject = async (
     const newProject: Project = req.body;
     if (newProject) {
       await connectionPool.query(
-        "INSERT INTO projet (title, img, tags, url, description) VALUES(?, ?, ?, ?, ?);",
+        "INSERT INTO projet (title, img, tags, git, url, description) VALUES(?, ?, ?, ?, ?);",
         [
           newProject.title,
           newProject.img,
           newProject.tags,
-          newProject.url,
+          newProject.git,
+          newProject.url ? newProject.url : "",
           newProject.description,
         ]
       );
@@ -96,12 +97,13 @@ exports.updateProject = async (
     );
     const formerImgUrl: string = data[0][0].img;
     await connectionPool.query(
-      "UPDATE projet SET title = ?, img = ?, tags = ?, url = ?, description= ? WHERE id=?; ",
+      "UPDATE projet SET title = ?, img = ?, tags = ?,git=?, url = ?, description= ? WHERE id=?; ",
       [
         projectUpdate.title,
         projectUpdate.img,
         projectUpdate.tags,
-        projectUpdate.url,
+        projectUpdate.git,
+        projectUpdate.url ? projectUpdate.url : "",
         projectUpdate.description,
         projectId,
       ]

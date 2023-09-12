@@ -25,7 +25,7 @@ export async function initialize() {
   const connection = await mysql.createConnection(config);
   await connection.query(`USE ${config.database}`);
   await connection.query(
-    `CREATE TABLE IF NOT EXISTS projet (id int PRIMARY KEY auto_increment, title varchar(255), img varchar(255), tags varchar(255), url varchar(255), description text );`
+    `CREATE TABLE IF NOT EXISTS projet (id int PRIMARY KEY auto_increment, title varchar(255), img varchar(255), tags varchar(255), git varchar(255), url varchar(255), description text );`
   );
   await connection.query(
     `CREATE TABLE IF NOT EXISTS about (id int primary key auto_increment, name varchar(255), img varchar(255), description text);`

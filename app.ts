@@ -10,6 +10,7 @@ require("dotenv").config();
 initialize();
 const app = express();
 
+app.enable("trust proxy");
 app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 
@@ -31,4 +32,8 @@ app.use("/api/about", aboutRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/connexion", connexionRouter);
 app.use("/api/curriculum", curriculumRouter);
+app.use("/admin", (req, res, next) => {
+	res.status(200)
+    res.sendFile(path.join(__dirname, "/public/index.html"));
+});
 module.exports = app;
